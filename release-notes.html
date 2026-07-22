@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Noor — Release Notes</title>
+  <style>
+    :root {
+      --gold-hi:    #f7d75c;
+      --gold-mid:   #d9a82a;
+      --gold-deep:  #9a7016;
+      --gold-200:   #d4b87a;
+      --gold-400:   #9c8050;
+
+      --bg:         #080C10;
+      --bg2:        #0F1520;
+      --bg3:        #1E2535;
+      --surface:    rgba(255,255,255,0.04);
+      --border:     rgba(212,184,122,0.15);
+      --accent:     #d4b87a;
+      --text-1:     #f0e8d8;
+      --text-2:     rgba(240,232,216,0.60);
+      --text-3:     rgba(240,232,216,0.35);
+      --rule:       rgba(212,184,122,0.18);
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg:         #ffffff;
+        --bg2:        #f5efe3;
+        --bg3:        #ede5d4;
+        --surface:    rgba(0,0,0,0.03);
+        --border:     rgba(156,128,80,0.18);
+        --accent:     #9c8050;
+        --text-1:     #2e2a24;
+        --text-2:     #4a4035;
+        --text-3:     #8a7a65;
+        --rule:       rgba(156,128,80,0.16);
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg:         #080C10;
+      --bg2:        #0F1520;
+      --bg3:        #1E2535;
+      --surface:    rgba(255,255,255,0.04);
+      --border:     rgba(212,184,122,0.15);
+      --accent:     #d4b87a;
+      --text-1:     #f0e8d8;
+      --text-2:     rgba(240,232,216,0.60);
+      --text-3:     rgba(240,232,216,0.35);
+      --rule:       rgba(212,184,122,0.18);
+    }
+    :root[data-theme="light"] {
+      --bg:         #ffffff;
+      --bg2:        #f5efe3;
+      --bg3:        #ede5d4;
+      --surface:    rgba(0,0,0,0.03);
+      --border:     rgba(156,128,80,0.18);
+      --accent:     #9c8050;
+      --text-1:     #2e2a24;
+      --text-2:     #4a4035;
+      --text-3:     #8a7a65;
+      --rule:       rgba(156,128,80,0.16);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-1);
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── theme toggle (matches brand page) ── */
+    .theme-toggle {
+      position: fixed;
+      top: 20px; right: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      cursor: pointer;
+      z-index: 100;
+      transition: border-color 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── nav between pages ── */
+    .page-nav {
+      display: flex;
+      gap: 6px;
+      padding: 20px 40px 0;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .page-nav a {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--text-3);
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+    .page-nav a:hover, .page-nav a.active {
+      color: var(--accent);
+      border-color: var(--border);
+      background: var(--surface);
+    }
+
+    /* ── header ── */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 40px 40px 32px;
+      max-width: 860px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--rule);
+    }
+    .header svg { flex-shrink: 0; }
+    .wordmark {
+      font-family: 'Amiri', Georgia, 'Times New Roman', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+      line-height: 1;
+      direction: rtl;
+    }
+    .tagline {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-top: 6px;
+    }
+    .doc-label {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      white-space: nowrap;
+    }
+
+    /* ── main wrap ── */
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+    }
+
+    /* ── release block ── */
+    .release {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 0 36px;
+      padding: 44px 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .release:last-child { border-bottom: none; }
+
+    .release-meta { padding-top: 4px; }
+    .version-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      background: rgba(212,184,122,0.1);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 4px 9px;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+    .release-date {
+      display: block;
+      font-size: 11px;
+      color: var(--text-3);
+      margin-top: 9px;
+      letter-spacing: 0.04em;
+      line-height: 1.5;
+    }
+
+    .release-content { min-width: 0; }
+    .release-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-1);
+      margin-bottom: 20px;
+      line-height: 1.3;
+    }
+
+    /* ── change groups ── */
+    .group { margin-bottom: 18px; }
+    .group:last-of-type { margin-bottom: 0; }
+
+    .group-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 9px;
+    }
+
+    .changes { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .changes li {
+      font-size: 13.5px;
+      color: var(--text-2);
+      padding-left: 18px;
+      position: relative;
+      line-height: 1.55;
+    }
+    .changes li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 8px;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.45;
+    }
+    .changes li strong { font-weight: 600; color: var(--text-1); }
+    .changes li code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 5px;
+      color: var(--accent);
+    }
+
+    /* ── tags ── */
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; }
+    .tag {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-3);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 10px;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── footer ── */
+    .footer {
+      margin-top: 56px;
+      padding-top: 24px;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .footer-note { font-size: 12px; color: var(--text-3); }
+    .footer-arabic {
+      font-size: 16px;
+      color: var(--accent);
+      opacity: 0.7;
+    }
+
+    @media (max-width: 560px) {
+      .header, .wrap, .page-nav { padding-left: 20px; padding-right: 20px; }
+      .release { grid-template-columns: 1fr; gap: 0; }
+      .release-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+      .release-date { margin-top: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="
+  const r = document.documentElement;
+  const cur = r.getAttribute('data-theme');
+  r.setAttribute('data-theme', cur === 'dark' ? 'light' : cur === 'light' ? 'dark' : (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'light' : 'dark'));
+  this.textContent = r.getAttribute('data-theme') === 'dark' ? '☀ Light' : '🌙 Dark';
+">🌙 Dark</button>
+
+
+
+<header class="header">
+  <svg viewBox="0 0 460 940" width="36" height="74" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="hbar" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#f7d75c"/><stop offset="0.5" stop-color="#d9a82a"/><stop offset="1" stop-color="#9a7016"/>
+      </linearGradient>
+      <linearGradient id="hdome" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#f7d75c"/><stop offset="1" stop-color="#d9a82a"/>
+      </linearGradient>
+      <radialGradient id="hglow" cx="50%" cy="50%" r="50%">
+        <stop offset="0" stop-color="#ffd766" stop-opacity="0.9"/>
+        <stop offset="1" stop-color="#e8a52e" stop-opacity="0"/>
+      </radialGradient>
+      <clipPath id="hglasc"><rect x="178" y="280" width="120" height="262" rx="7"/></clipPath>
+      <mask id="hcresm">
+        <circle cx="236" cy="360" r="36" fill="white"/>
+        <circle cx="255" cy="351" r="31" fill="black"/>
+      </mask>
+    </defs>
+    <circle cx="236" cy="360" r="150" fill="url(#hglow)" opacity="0.75"/>
+    <g clip-path="url(#hglasc)">
+      <rect x="178" y="280" width="120" height="262" fill="#221d0c"/>
+      <circle cx="236" cy="360" r="130" fill="url(#hglow)" opacity="0.85"/>
+    </g>
+    <rect x="190" y="316" width="92" height="92" fill="#ffe48a" mask="url(#hcresm)"/>
+    <line x1="236" y1="152" x2="236" y2="196" stroke="#d9a82a" stroke-width="2.5"/>
+    <circle cx="236" cy="146" r="7" fill="none" stroke="#d9a82a" stroke-width="2.5"/>
+    <circle cx="236" cy="162" r="3.2" fill="#f7d75c"/>
+    <circle cx="236" cy="174" r="3.2" fill="#d9a82a"/>
+    <circle cx="236" cy="186" r="3.2" fill="#f7d75c"/>
+    <path d="M176,266 C176,214 198,196 236,196 C274,196 296,214 296,266 Z" fill="url(#hdome)"/>
+    <line x1="178" y1="268" x2="294" y2="268" stroke="url(#hbar)" stroke-width="9" stroke-linecap="round"/>
+    <line x1="168" y1="278" x2="304" y2="278" stroke="url(#hbar)" stroke-width="11" stroke-linecap="round"/>
+    <line x1="170" y1="410" x2="302" y2="410" stroke="url(#hbar)" stroke-width="8" stroke-linecap="round"/>
+    <line x1="168" y1="544" x2="304" y2="544" stroke="url(#hbar)" stroke-width="12" stroke-linecap="round"/>
+    <line x1="172" y1="280" x2="172" y2="542" stroke="url(#hbar)" stroke-width="10" stroke-linecap="round"/>
+    <line x1="213" y1="280" x2="213" y2="542" stroke="url(#hbar)" stroke-width="8" stroke-linecap="round"/>
+    <line x1="259" y1="280" x2="259" y2="542" stroke="url(#hbar)" stroke-width="8" stroke-linecap="round"/>
+    <line x1="300" y1="280" x2="300" y2="542" stroke="url(#hbar)" stroke-width="10" stroke-linecap="round"/>
+    <line x1="184" y1="556" x2="288" y2="556" stroke="url(#hbar)" stroke-width="8" stroke-linecap="round"/>
+    <line x1="192" y1="568" x2="280" y2="568" stroke="url(#hbar)" stroke-width="9" stroke-linecap="round"/>
+    <line x1="202" y1="579" x2="270" y2="579" stroke="url(#hbar)" stroke-width="8" stroke-linecap="round"/>
+    <line x1="212" y1="589" x2="260" y2="589" stroke="url(#hbar)" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="236" cy="610" r="10" fill="url(#hbar)"/>
+    <circle cx="236" cy="622" r="3" fill="#d9a82a"/>
+  </svg>
+  <div>
+    <div class="wordmark">نور</div>
+    <div class="tagline">Noor — Islamic Companion App</div>
+  </div>
+  <div class="doc-label">Release Notes</div>
+</header>
+
+<div class="wrap">
+
+  <!-- ── v1.1.5 ── -->
+  <div class="release">
+    <div class="release-meta">
+      <span class="version-badge">v1.1.5</span>
+      <span class="release-date">12 Jul 2026</span>
+    </div>
+    <div class="release-content">
+      <h2 class="release-title">Custom Tasbeeh Targets & Prayer Time Format</h2>
+
+      <div class="group">
+        <p class="group-label">New Features</p>
+        <ul class="changes">
+          <li><strong>My Tasbeeh</strong> — create personal recitation goals with a name, optional Arabic text, and target count (e.g. Al-Noor × 25,000). Progress tracked independently and persisted across sessions.</li>
+          <li><strong>Counting view</strong> — dedicated ring display with Completed / Remaining / Progress stat cards and green completion state.</li>
+          <li><strong>Tasbih is now the default tab</strong> — Tasbih opens first; Sessions is the second tab.</li>
+        </ul>
+      </div>
+
+      <div class="group">
+        <p class="group-label">Bug Fixes</p>
+        <ul class="changes">
+          <li><strong>Prayer times follow device 12/24h setting</strong> — a native Android module now reads <code>DateFormat.is24HourFormat()</code> instead of locale defaults. The change propagates to prayer cards, next prayer label, optional prayers, and the home screen widget.</li>
+          <li><strong>Widget highlights current prayer</strong> — previously highlighted the next prayer.</li>
+          <li><strong>Swipe to delete notifications</strong> — swipe left on any notification row to reveal a delete action.</li>
+          <li>Ghost "Noor" empty notifications no longer appear in inbox.</li>
+          <li>Fixed duplicate key warning in the notification list.</li>
+          <li>Fixed left-side icon gap in notifications screen.</li>
+          <li>Fixed <code>@expo/ui</code> and <code>expo-widgets</code> version ranges causing CI failures.</li>
+        </ul>
+      </div>
+
+      <div class="tags">
+        <span class="tag">Tasbih</span>
+        <span class="tag">Prayer Times</span>
+        <span class="tag">Widget</span>
+        <span class="tag">Notifications</span>
+        <span class="tag">Android</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── v1.1.4 ── -->
+  <div class="release">
+    <div class="release-meta">
+      <span class="version-badge">v1.1.4</span>
+      <span class="release-date">Jun 2026</span>
+    </div>
+    <div class="release-content">
+      <h2 class="release-title">iOS Widgets & In-App Notification Inbox</h2>
+
+      <div class="group">
+        <p class="group-label">New Features</p>
+        <ul class="changes">
+          <li><strong>iOS widgets</strong> — Prayer Times, Islamic Date, Daily Verse, and Dhikr Counter widgets for the iPhone home and lock screen via WidgetKit.</li>
+          <li><strong>Notification inbox</strong> — bell icon opens a history of all received notifications, grouped by Today / Earlier with filter chips by type.</li>
+          <li><strong>Deep-link from notifications</strong> — tapping a notification navigates directly to the relevant section of the app.</li>
+          <li><strong>Background notification sync</strong> — missed notifications captured via background fetch task and notification ledger.</li>
+        </ul>
+      </div>
+
+      <div class="group">
+        <p class="group-label">Bug Fixes</p>
+        <ul class="changes">
+          <li>Fixed iOS build number display in Settings.</li>
+          <li>Resolved Reanimated strict-mode warnings in SkeletonLoader, SurahBanner, and Qibla screen.</li>
+          <li>Removed <code>expo-widgets</code> from Android plugin list — iOS-only package was breaking Android builds.</li>
+          <li>Throttled notification reschedule on app open to protect imminent alarms.</li>
+        </ul>
+      </div>
+
+      <div class="tags">
+        <span class="tag">iOS</span>
+        <span class="tag">Widgets</span>
+        <span class="tag">Notifications</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── v1.1.0 ── -->
+  <div class="release">
+    <div class="release-meta">
+      <span class="version-badge">v1.1.0</span>
+      <span class="release-date">May 2026</span>
+    </div>
+    <div class="release-content">
+      <h2 class="release-title">Zakat Calculator & Firebase Analytics</h2>
+
+      <div class="group">
+        <p class="group-label">New Features</p>
+        <ul class="changes">
+          <li><strong>Zakat Calculator</strong> — full nisab calculation with live gold/silver prices, asset entry, and disbursement tracking.</li>
+          <li><strong>Edit & recalculate</strong> — existing Zakat records can be reopened and updated.</li>
+          <li><strong>Firebase Analytics</strong> — anonymous screen and event tracking.</li>
+        </ul>
+      </div>
+
+      <div class="group">
+        <p class="group-label">Bug Fixes</p>
+        <ul class="changes">
+          <li>Fixed race condition when switching metal type during live price fetch.</li>
+          <li>Fixed keyboard covering disbursement inputs on smaller screens.</li>
+          <li>Fixed Live Price button overflow on narrow devices.</li>
+        </ul>
+      </div>
+
+      <div class="tags">
+        <span class="tag">Zakat</span>
+        <span class="tag">Analytics</span>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span class="footer-note">Noor · Islamic Companion App · Android &amp; iOS</span>
+    <span class="footer-arabic">بِسْمِ اللَّه</span>
+  </footer>
+
+</div>
+</body>
+</html>
