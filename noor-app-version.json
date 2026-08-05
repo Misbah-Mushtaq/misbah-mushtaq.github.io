@@ -1,0 +1,10 @@
+{
+  "ios": {
+    "minVersion": "1.1.0",
+    "storeUrl": "https://apps.apple.com/pk/app/noor-islamic-hub/id6792539202"
+  },
+  "android": {
+    "minVersion": "1.1.0",
+    "storeUrl": "https://play.google.com/store/apps/details?id=com.noor.io"
+  }
+}
